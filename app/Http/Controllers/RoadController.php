@@ -51,22 +51,27 @@ class RoadController extends Controller
         return view('roads.edit', compact('road'));
     }
 
-    public function update(Request $request, Place $place){
-        $roadData = $request->validate([
+    public function update(Request $request, Place $road){
+        $request->validate([
             'place_name' => 'required',
             'address' => 'nullable',
             'latitude' => ['required', 'required_with:longitude|15'],
             'longitude' => ['required', 'required_with:latitude|15'],
         ]);
 
-        $place->update($roadData);
-        return redirect()->route('roads.show', $place);
+        $road->place_name = $request->input('place_name');
+        $road->address = $request->input('address');
+        $road->latitude = $request->input('latitude');
+        $road->longitude = $request->input('longitude');
+
+        $road->update();
+        return redirect()->route('roads.show', $road);
     }
 
-    public function destroy(Request $request, Place $place){
-        $request->validate(['id' => 'required']);
+    public function destroy(Request $request, Place $road){
+        $request->validate(['road_id' => 'required']);
 
-        if($request->get('id') == $place->id && $place->delete()){
+        if($request->input('road_id') == $road->id && $road->delete()){
             return redirect()->route('roads.index');
         }
 

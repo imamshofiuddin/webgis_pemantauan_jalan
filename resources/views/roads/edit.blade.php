@@ -10,13 +10,13 @@
             <div class="card">
                 <div class="card-header">{{ __('road.delete') }}</div>
                 <div class="card-body">
-                    <label class="control-label text-primary">{{ __('road.name') }}</label>
-                    <p>{{ $road->name }}</p>
-                    <label class="control-label text-primary">{{ __('road.address') }}</label>
+                    <label class="control-label text-primary">Road Name</label>
+                    <p>{{ $road->place_name }}</p>
+                    <label class="control-label text-primary">Road Address</label>
                     <p>{{ $road->address }}</p>
-                    <label class="control-label text-primary">{{ __('road.latitude') }}</label>
+                    <label class="control-label text-primary">Latitude</label>
                     <p>{{ $road->latitude }}</p>
-                    <label class="control-label text-primary">{{ __('road.longitude') }}</label>
+                    <label class="control-label text-primary">Longitude</label>
                     <p>{{ $road->longitude }}</p>
                     {!! $errors->first('road_id', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                 </div>
@@ -40,7 +40,7 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="name" class="control-label">{{ __('road.name') }}</label>
-                        <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name', $road->name) }}" required>
+                        <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="place_name" value="{{ old('name', $road->place_name) }}" required>
                         {!! $errors->first('name', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                     </div>
                     <div class="form-group">
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="mapid"></div>
+                    <div id="map"></div>
                 </div>
                 <div class="card-footer">
                     <input type="submit" value="{{ __('road.update') }}" class="btn btn-success">
@@ -86,7 +86,7 @@
     crossorigin=""/>
 
 <style>
-    #mapid { height: 300px; }
+    #map { height: 300px; }
 </style>
 @endsection
 
@@ -94,35 +94,38 @@
 <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
     integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
     crossorigin=""></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    var mapCenter = [{{ $road->latitude }}, {{ $road->longitude }}];
-    var map = L.map('mapid').setView(mapCenter, {{ config('leaflet.detail_zoom_level') }});
+    window.onload = function () {
+        var mapCenter = [{{ $road->latitude }}, {{ $road->longitude }}];
+        var map = L.map('map').setView(mapCenter, 100);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
-    var marker = L.marker(mapCenter).addTo(map);
-    function updateMarker(lat, lng) {
-        marker
-        .setLatLng([lat, lng])
-        .bindPopup("Your location :  " + marker.getLatLng().toString())
-        .openPopup();
-        return false;
-    };
+        var marker = L.marker(mapCenter).addTo(map);
+        function updateMarker(lat, lng) {
+            marker
+            .setLatLng([lat, lng])
+            .bindPopup("Your location :  " + marker.getLatLng().toString())
+            .openPopup();
+            return false;
+        };
 
-    map.on('click', function(e) {
-        let latitude = e.latlng.lat.toString().substring(0, 15);
-        let longitude = e.latlng.lng.toString().substring(0, 15);
-        $('#latitude').val(latitude);
-        $('#longitude').val(longitude);
-        updateMarker(latitude, longitude);
-    });
+        map.on('click', function(e) {
+            let latitude = e.latlng.lat.toString().substring(0, 15);
+            let longitude = e.latlng.lng.toString().substring(0, 15);
+            $('#latitude').val(latitude);
+            $('#longitude').val(longitude);
+            updateMarker(latitude, longitude);
+        });
 
-    var updateMarkerByInputs = function() {
-        return updateMarker( $('#latitude').val() , $('#longitude').val());
+        var updateMarkerByInputs = function() {
+            return updateMarker( $('#latitude').val() , $('#longitude').val());
+        }
+        $('#latitude').on('input', updateMarkerByInputs);
+        $('#longitude').on('input', updateMarkerByInputs);
     }
-    $('#latitude').on('input', updateMarkerByInputs);
-    $('#longitude').on('input', updateMarkerByInputs);
 </script>
 @endpush

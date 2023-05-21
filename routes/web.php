@@ -31,4 +31,6 @@ Route::get('/create', [RoadController::class,'create'])->name('roads.create');
 Route::get('/index', [RoadController::class,'index'])->name('roads.index');
 Route::post('/store', [RoadController::class,'store'])->name('roads.store');
 Route::get('/show/{road}', [RoadController::class,'show'])->name('roads.show');
-Route::get('/edit', [RoadController::class,'edit'])->name('roads.edit');
+Route::get('/edit/{road}', [RoadController::class,'edit'])->name('roads.edit');
+Route::patch('update/{road}',[RoadController::class,'update'])->name('roads.update');
+Route::delete('delete/{road}',[RoadController::class,'destroy'])->name('roads.destroy');
