@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('road.edit'))
+@section('title', 'Edit Road')
 
 @section('content')
 <div class="row justify-content-center">
@@ -8,7 +8,7 @@
         @if (request('action') == 'delete' && $road)
         @can('delete', $road)
             <div class="card">
-                <div class="card-header">{{ __('road.delete') }}</div>
+                <div class="card-header">Delete</div>
                 <div class="card-body">
                     <label class="control-label text-primary">Road Name</label>
                     <p>{{ $road->place_name }}</p>
@@ -21,32 +21,72 @@
                     {!! $errors->first('road_id', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                 </div>
                 <hr style="margin:0">
-                <div class="card-body text-danger">{{ __('road.delete_confirm') }}</div>
+                <div class="card-body text-danger">Konfirmasi</div>
                 <div class="card-footer">
                     <form method="POST" action="{{ route('roads.destroy', $road) }}" accept-charset="UTF-8" onsubmit="return confirm(&quot;{{ __('app.delete_confirm') }}&quot;)" class="del-form float-right" style="display: inline;">
                         {{ csrf_field() }} {{ method_field('delete') }}
                         <input name="road_id" type="hidden" value="{{ $road->id }}">
-                        <button type="submit" class="btn btn-danger">{{ __('app.delete_confirm_button') }}</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
-                    <a href="{{ route('roads.edit', $road) }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                    <a href="{{ route('roads.edit', $road) }}" class="btn btn-link">Cancel</a>
                 </div>
             </div>
         @endcan
         @else
         <div class="card">
-            <div class="card-header">{{ __('road.edit') }}</div>
+            <div class="card-header">Edit Road</div>
             <form method="POST" action="{{ route('roads.update', $road) }}" accept-charset="UTF-8" enctype="multipart/form-data">
                 {{ csrf_field() }} {{ method_field('patch') }}
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="latitude" class="control-label">Latitude</label>
+                                <input id="latitude" type="text" class="form-control{{ $errors->has('latitude') ? ' is-invalid' : '' }}" name="latitude" value="{{ old('latitude', $road->latitude) }}" required>
+                                {!! $errors->first('latitude', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="longitude" class="control-label">Longitude</label>
+                                <input id="longitude" type="text" class="form-control{{ $errors->has('longitude') ? ' is-invalid' : '' }}" name="longitude" value="{{ old('longitude', $road->longitude) }}" required>
+                                {!! $errors->first('longitude', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="map"></div>
                     <div class="form-group">
-                        <label for="name" class="control-label">{{ __('road.name') }}</label>
+                        <label for="name" class="control-label">Road Name</label>
                         <input id="name" type="text" class="form-control{{ $errors->has('place_name') ? ' is-invalid' : '' }}" name="place_name" value="{{ old('name', $road->place_name) }}" required>
                         {!! $errors->first('name', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                     </div>
                     <div class="form-group">
-                        <label for="address" class="control-label">{{ __('road.address') }}</label>
+                        <label for="address" class="control-label">Road Address</label>
                         <textarea id="address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" rows="2">{{ old('address', $road->address) }}</textarea>
                         {!! $errors->first('address', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                    </div>
+                    <div class="form-group my-2">
+                        <label class="control-label">Road Condition</label><br>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <input type="radio" name="condition" id="condition" value="Rusak parah"
+                                @if ($road->condition == "Rusak parah")
+                                    checked
+                                @endif > Rusak parah
+                            </div>
+                            <div class="col-lg-4">
+                                <input type="radio" name="condition" id="condition" value="Sedang"
+                                @if ($road->condition == "Sedang")
+                                    checked
+                                @endif> Sedang
+                            </div>
+                            <div class="col-lg-4">
+                                <input type="radio" name="condition" id="condition" value="Ringan"
+                                @if ($road->condition == "Ringan")
+                                    checked
+                                @endif> Ringan
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="address" class="control-label">Deskripsi</label>
@@ -57,29 +97,12 @@
                         <label class="input-group-text" for="inputGroupFile01">Photo</label>
                         <input type="file" class="form-control" id="inputGroupFile01" name="photo" accept="image/*">
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="latitude" class="control-label">{{ __('road.latitude') }}</label>
-                                <input id="latitude" type="text" class="form-control{{ $errors->has('latitude') ? ' is-invalid' : '' }}" name="latitude" value="{{ old('latitude', $road->latitude) }}" required>
-                                {!! $errors->first('latitude', '<span class="invalid-feedback" role="alert">:message</span>') !!}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="longitude" class="control-label">{{ __('road.longitude') }}</label>
-                                <input id="longitude" type="text" class="form-control{{ $errors->has('longitude') ? ' is-invalid' : '' }}" name="longitude" value="{{ old('longitude', $road->longitude) }}" required>
-                                {!! $errors->first('longitude', '<span class="invalid-feedback" role="alert">:message</span>') !!}
-                            </div>
-                        </div>
-                    </div>
-                    <div id="map"></div>
                 </div>
                 <div class="card-footer">
-                    <input type="submit" value="{{ __('road.update') }}" class="btn btn-success">
-                    <a href="{{ route('roads.show', $road) }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                    <input type="submit" value="Update" class="btn btn-success">
+                    <a href="{{ route('roads.show', $road) }}" class="btn btn-link">Cancel</a>
                     @can('delete', $road)
-                        <a href="{{ route('roads.edit', [$road, 'action' => 'delete']) }}" id="del-road-{{ $road->id }}" class="btn btn-danger float-right">{{ __('app.delete') }}</a>
+                        <a href="{{ route('roads.edit', [$road, 'action' => 'delete']) }}" id="del-road-{{ $road->id }}" class="btn btn-danger float-right">Delete</a>
                     @endcan
                 </div>
             </form>

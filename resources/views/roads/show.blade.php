@@ -2,51 +2,55 @@
 
 @section('title', __('road.detail'))
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">Road Detail</div>
-            <div class="card-body">
-                <table class="table table-sm">
-                    <tbody>
-                        <tr><td>Road Name</td><td>{{ $road->place_name }}</td></tr>
-                        <tr><td>Road Address</td><td>{{ $road->address }}</td></tr>
-                        <tr><td>Condition</td><td>{{ $road->condition }}</td></tr>
-                        <tr><td>Description</td><td>{{ $road->description }}</td></tr>
-                        <tr><td>Latitude</td><td>{{ $road->latitude }}</td></tr>
-                        <tr><td>Longitude</td><td>{{ $road->longitude }}</td></tr>
-                        <tr><td>Photo</td><td><a target="_blank" href="{{ asset("upload/foto_jalan/$road->image") }}"><img src="{{ asset("upload/foto_jalan/$road->image") }}" width="200" alt=""></a></td></tr>
-                        <form action="{{ route('roads.fixed', $road) }}" method="POST">
-                            @csrf
-                            @if ($road->isFixed)
-                                <tr><td>Action</td><td><button class="btn btn-danger" onclick="return confirm('Apakah ingin mencabut status jalan sudah diperbaiki ?');">Remove mark as fixed</button></td></tr>
-                            @else
-                                <tr><td>Action</td><td><button class="btn btn-success" onclick="return confirm('Apakah jalan sudah diperbaiki ?');">Mark as fixed</button></td></tr>
-                            @endif
-                        </form>
-                    </tbody>
-                </table>
-            </div>
-            <div class="card-footer">
-                @can('update', $road)
-                    <a href="{{ route('roads.edit', $road) }}" id="edit-road-{{ $road->id }}" class="btn btn-warning">Edit Road</a>
-                @endcan
-                @if(auth()->check())
-                    <a href="{{ route('roads.index') }}" class="btn btn-link">Road Index</a>
-                @else
-                    <a href="{{ route('road_map.index') }}" class="btn btn-link">Road Map</a>
-                @endif
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Road Detail</div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <tbody>
+                            <tr><td>Road Name</td><td>{{ $road->place_name }}</td></tr>
+                            <tr><td>Road Address</td><td>{{ $road->address }}</td></tr>
+                            <tr><td>Condition</td><td>{{ $road->condition }}</td></tr>
+                            <tr><td>Description</td><td>{{ $road->description }}</td></tr>
+                            <tr><td>Latitude</td><td>{{ $road->latitude }}</td></tr>
+                            <tr><td>Longitude</td><td>{{ $road->longitude }}</td></tr>
+                            <tr><td>Photo</td><td><a target="_blank" href="{{ asset("upload/foto_jalan/$road->image") }}"><img src="{{ asset("upload/foto_jalan/$road->image") }}" width="200" alt=""></a></td></tr>
+                            <form action="{{ route('roads.fixed', $road) }}" method="POST">
+                                @csrf
+                                @if ($road->isFixed)
+                                    <tr><td>Action</td><td><button class="btn btn-danger" onclick="return confirm('Apakah ingin mencabut status jalan sudah diperbaiki ?');">Remove mark as fixed</button></td></tr>
+                                @else
+                                    <tr><td>Action</td><td><button class="btn btn-success" onclick="return confirm('Apakah jalan sudah diperbaiki ?');">Mark as fixed</button></td></tr>
+                                @endif
+                            </form>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    @if (Auth::user()->role == 'admin')
+                        @can('update', $road)
+                            <a href="{{ route('roads.edit', $road) }}" id="edit-road-{{ $road->id }}" class="btn btn-warning">Edit Road</a>
+                        @endcan
+                    @endif
+                    @if(auth()->check())
+                        <a href="{{ route('roads.index') }}" class="btn btn-link">Road Index</a>
+                    @else
+                        <a href="{{ route('road_map.index') }}" class="btn btn-link">Road Map</a>
+                    @endif
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">{{ trans('road.location') }}</div>
-            @if ($road->coordinate)
-            <div class="card-body" id="map"></div>
-            @else
-            <div class="card-body">{{ __('road.no_coordinate') }}</div>
-            @endif
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">{{ trans('road.location') }}</div>
+                @if ($road->coordinate)
+                <div class="card-body" id="map"></div>
+                @else
+                <div class="card-body">{{ __('road.no_coordinate') }}</div>
+                @endif
+            </div>
         </div>
     </div>
 </div>

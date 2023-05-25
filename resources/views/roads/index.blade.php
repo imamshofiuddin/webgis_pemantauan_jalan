@@ -5,9 +5,6 @@
 @section('content')
 <div class="container">
     <div class="mb-3">
-        <div class="float-right">
-                <a href="{{ route('road_map.index') }}" class="btn btn-success">Add Road Location</a>
-        </div>
         <h1 class="page-title"><small>Total : {{ $roads->total() }} Roads</small></h1>
     </div>
 
@@ -17,10 +14,15 @@
                 <div class="card-header">
                     <form method="GET" action="" accept-charset="UTF-8" class="form-inline">
                         <div class="form-group">
-                            <label for="q" class="control-label">Search</label>
-                            <input placeholder="Search road" name="q" type="text" id="q" class="form-control mx-sm-2" value="{{ request('q') }}">
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <input placeholder="Search road" name="q" type="text" id="q" class="form-control mx-sm-2" value="{{ request('q') }}">
+                                </div>
+                                <div class="col-lg-2">
+                                    <input type="submit" value="Search" class="btn btn-secondary">
+                                </div>
+                            </div>
                         </div>
-                        <input type="submit" value="Search" class="btn btn-secondary">
                         <a href="{{ route('roads.index') }}" class="btn btn-link">Reset</a>
                     </form>
                 </div>

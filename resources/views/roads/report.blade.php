@@ -45,7 +45,8 @@
                             <td class="text-center">
                                 <form action="{{ route('roads.confirm', $road) }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="btn btn-success">Approve</button>
+                                    <button type="submit" class="btn btn-success" name="accept">Terima</button> |
+                                    <button type="submit" class="btn btn-danger" name="deny" onclick="return confirm('Apakah Anda yakin menghapus report ?')">Tolak</button>
                                 </form>
                             </td>
                         </tr>

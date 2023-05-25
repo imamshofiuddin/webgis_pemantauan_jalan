@@ -55,7 +55,7 @@ class RoadController extends Controller
         if (Auth::user()) {
             return redirect()->route('roads.show', $road);
         } else {
-            return view('roads.map');
+            return redirect()->route('road_map.index');
         }
 
 
@@ -83,6 +83,7 @@ class RoadController extends Controller
         }
 
         $road->place_name = $request->input('place_name');
+        $road->condition = $request->input('condition');
         $road->address = $request->input('address');
         $road->latitude = $request->input('latitude');
         $road->longitude = $request->input('longitude');
@@ -120,13 +121,18 @@ class RoadController extends Controller
     }
 
     public function confirmReport(Place $road){
-        if ($road->isConfirmed == false) {
-            $road->isConfirmed = true;
+        if(isset($_POST['accept'])){
+            if ($road->isConfirmed == false) {
+                $road->isConfirmed = true;
+            } else {
+                $road->isConfirmed = false;
+            }
+
+            $road->update();
         } else {
-            $road->isConfirmed = false;
+            $road->delete();
         }
 
-        $road->update();
         return redirect()->route('roads.report');
     }
 
