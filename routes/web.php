@@ -34,3 +34,7 @@ Route::get('/show/{road}', [RoadController::class,'show'])->name('roads.show');
 Route::get('/edit/{road}', [RoadController::class,'edit'])->name('roads.edit');
 Route::patch('update/{road}',[RoadController::class,'update'])->name('roads.update');
 Route::delete('delete/{road}',[RoadController::class,'destroy'])->name('roads.destroy');
+Route::post('fix/{road}',[RoadController::class, 'roadFixedUpdate'])->name('roads.fixed');
+Route::get('report',[RoadController::class, 'roadReport'])->name('roads.report');
+Route::post('confirm/{road}',[RoadController::class, 'confirmReport'])->name('roads.confirm');
+Route::get('statistic',[RoadController::class,'roadStatistic'])->name('roads.statistic');

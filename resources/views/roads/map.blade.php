@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="card">
-    <div class="card-body" id="map"></div>
-</div>
+    <div class="card">
+        <div class="card-body" id="map"></div>
+    </div>
 @endsection
 
 @push('head')
@@ -11,6 +11,10 @@
 integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
 crossorigin=""/>
 <style>
+    body {
+        margin: 0px;
+        height: 100%;
+    }
     #map { height: 500px; }
 </style>
 <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
@@ -48,18 +52,26 @@ crossorigin=""/>
             iconUrl: 'images/pin-blue.png',
             iconSize: [40,40],
         });
+        var pinGreenIcon = L.icon({
+            iconUrl: 'images/pin-green.png',
+            iconSize: [40,40],
+        });
         axios.get('{{ route('api.roads.index') }}')
         .then(function (response) {
             console.log(response.data);
             L.geoJSON(response.data, {
                 pointToLayer: function(geoJsonPoint,latlng) {
                     console.log(latlng);
-                    if(geoJsonPoint.properties.condition == 'Rusak parah'){
-                        return L.marker(latlng,{icon: pinRedIcon});
-                    } else if(geoJsonPoint.properties.condition == 'Sedang') {
-                        return L.marker(latlng,{icon: pinOrangeIcon});
+                    if(geoJsonPoint.properties.isFixed){
+                        return L.marker(latlng,{icon: pinGreenIcon});
                     } else {
-                        return L.marker(latlng,{icon: pinBlueIcon});
+                        if(geoJsonPoint.properties.condition == 'Rusak parah'){
+                            return L.marker(latlng,{icon: pinRedIcon});
+                        } else if(geoJsonPoint.properties.condition == 'Sedang') {
+                            return L.marker(latlng,{icon: pinOrangeIcon});
+                        } else {
+                            return L.marker(latlng,{icon: pinBlueIcon});
+                        }
                     }
                 }
             })
@@ -71,7 +83,6 @@ crossorigin=""/>
             console.log(error);
         });
 
-        @can('create', new App\Models\Place)
             var theMarker;
 
             map.on('click', function(e) {
@@ -89,7 +100,6 @@ crossorigin=""/>
                 theMarker.bindPopup(popupContent)
                 .openPopup();
             });
-        @endcan
     }
 
 </script>

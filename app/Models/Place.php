@@ -19,6 +19,7 @@ class Place extends Model
         'latitude',
         'longitude',
         'condition',
+        'isFixed',
     ];
 
     public $appends = [
@@ -68,11 +69,21 @@ class Place extends Model
      */
     public function getMapPopupContentAttribute()
     {
-        $mapPopupContent = '';
-        $mapPopupContent .= '<div class="my-2"><strong>'.'Place name'.':</strong><br>'.$this->place_name.'</div>';
-        $mapPopupContent .= '<div class="my-2"><strong>'.'Address'.':</strong><br>'.$this->address.'</div>';
-        $mapPopupContent .= '<div class="my-2"><strong>'.'Condition'.':</strong><br>'.$this->condition.'</div>';
-        $mapPopupContent .= '<div class="my-2"><strong>'.'Coordinate'.':</strong><br>'.$this->coordinate.'</div>';
+        if($this->isFixed){
+            $mapPopupContent = '';
+            $mapPopupContent .= '<div class="my-2"><strong>'.'Status'.':</strong><br><span class="badge text-bg-success">Fixed</span></div>';
+            $mapPopupContent .= '<div class="my-2"><strong>'.'Place name'.':</strong><br>'.$this->place_name.'</div>';
+            $mapPopupContent .= '<div class="my-2"><strong>'.'Address'.':</strong><br>'.$this->address.'</div>';
+            $mapPopupContent .= '<div class="my-2"><strong>'.'Old Condition'.':</strong><br>'.$this->condition.'</div>';
+        } else {
+            $mapPopupContent = '';
+            $mapPopupContent .= '<div class="my-2"><strong>'.'Place name'.':</strong><br>'.$this->place_name.'</div>';
+            $mapPopupContent .= '<div class="my-2"><strong>'.'Address'.':</strong><br>'.$this->address.'</div>';
+            $mapPopupContent .= '<div class="my-2"><strong>'.'Condition'.':</strong><br>'.$this->condition.'</div>';
+            $mapPopupContent .= '<div class="my-2"><strong>'.'Photo'.':</strong><br>'.'<img width="100%" src='. asset("upload/foto_jalan/$this->image").'>'.'</div>';
+            $mapPopupContent .= '<div class="my-2"><strong>'.'Coordinate'.':</strong><br>'.$this->coordinate.'</div>';
+            $mapPopupContent .= '<div class="my-2"><strong>'.'Status'.':</strong><br><span class="badge text-bg-danger">Belum Diperbaiki</span></div>';
+        }
 
         return $mapPopupContent;
     }

@@ -15,6 +15,15 @@
                         <tr><td>Description</td><td>{{ $road->description }}</td></tr>
                         <tr><td>Latitude</td><td>{{ $road->latitude }}</td></tr>
                         <tr><td>Longitude</td><td>{{ $road->longitude }}</td></tr>
+                        <tr><td>Photo</td><td><a target="_blank" href="{{ asset("upload/foto_jalan/$road->image") }}"><img src="{{ asset("upload/foto_jalan/$road->image") }}" width="200" alt=""></a></td></tr>
+                        <form action="{{ route('roads.fixed', $road) }}" method="POST">
+                            @csrf
+                            @if ($road->isFixed)
+                                <tr><td>Action</td><td><button class="btn btn-danger" onclick="return confirm('Apakah ingin mencabut status jalan sudah diperbaiki ?');">Remove mark as fixed</button></td></tr>
+                            @else
+                                <tr><td>Action</td><td><button class="btn btn-success" onclick="return confirm('Apakah jalan sudah diperbaiki ?');">Mark as fixed</button></td></tr>
+                            @endif
+                        </form>
                     </tbody>
                 </table>
             </div>

@@ -7,7 +7,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">Create Road</div>
-            <form method="POST" action="{{ route('roads.store') }}" accept-charset="UTF-8">
+            <form method="POST" action="{{ route('roads.store') }}" accept-charset="UTF-8" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
                     <div class="row my-2">
@@ -50,6 +50,10 @@
                     <div class="form-group my-2">
                         <label for="description" class="control-label">Description</label>
                         <textarea id="description" class="form-control" name="description" rows="4"></textarea>
+                    </div>
+                    <div class="input-group my-2">
+                        <label class="input-group-text" for="inputGroupFile01">Photo</label>
+                        <input type="file" class="form-control" id="inputGroupFile01" name="photo" accept="image/*" required>
                     </div>
                 </div>
                 <div class="card-footer">

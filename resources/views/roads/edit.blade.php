@@ -35,18 +35,27 @@
         @else
         <div class="card">
             <div class="card-header">{{ __('road.edit') }}</div>
-            <form method="POST" action="{{ route('roads.update', $road) }}" accept-charset="UTF-8">
+            <form method="POST" action="{{ route('roads.update', $road) }}" accept-charset="UTF-8" enctype="multipart/form-data">
                 {{ csrf_field() }} {{ method_field('patch') }}
                 <div class="card-body">
                     <div class="form-group">
                         <label for="name" class="control-label">{{ __('road.name') }}</label>
-                        <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="place_name" value="{{ old('name', $road->place_name) }}" required>
+                        <input id="name" type="text" class="form-control{{ $errors->has('place_name') ? ' is-invalid' : '' }}" name="place_name" value="{{ old('name', $road->place_name) }}" required>
                         {!! $errors->first('name', '<span class="invalid-feedback" role="alert">:message</span>') !!}
                     </div>
                     <div class="form-group">
                         <label for="address" class="control-label">{{ __('road.address') }}</label>
-                        <textarea id="address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" rows="4">{{ old('address', $road->address) }}</textarea>
+                        <textarea id="address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" rows="2">{{ old('address', $road->address) }}</textarea>
                         {!! $errors->first('address', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                    </div>
+                    <div class="form-group">
+                        <label for="address" class="control-label">Deskripsi</label>
+                        <textarea id="address" class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" name="address" rows="4">{{ old('address', $road->description) }}</textarea>
+                        {!! $errors->first('address', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                    </div>
+                    <div class="input-group my-2">
+                        <label class="input-group-text" for="inputGroupFile01">Photo</label>
+                        <input type="file" class="form-control" id="inputGroupFile01" name="photo" accept="image/*">
                     </div>
                     <div class="row">
                         <div class="col-md-6">

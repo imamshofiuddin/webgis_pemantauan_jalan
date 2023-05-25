@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class RoadController extends Controller
 {
     public function index(Request $request){
-        $roads = Place::all();
+        $roads = Place::where('isConfirmed','=',true)->get();
 
         $geoJSONdata = $roads->map(function ($road) {
             return [
