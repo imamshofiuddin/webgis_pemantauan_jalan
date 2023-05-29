@@ -31,6 +31,15 @@ crossorigin=""/>
         }
     }
 
+    function reverseGeocode(lat, lng) {
+        var url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=jsonv2`;
+
+        return fetch(url)
+            .then(response => response.json())
+            .then(data => data.display_name);
+
+    }
+
     function showPosition(position) {
         var map = L.map('map').setView([position.coords.latitude, position.coords.longitude],90);
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -93,8 +102,12 @@ crossorigin=""/>
                     map.removeLayer(theMarker);
                 };
 
+                reverseGeocode(latitude, longitude).then(address => {
+                    console.log(address);
+                });
+
                 var popupContent = "Your location : " + latitude + ", " + longitude + ".";
-                popupContent += '<br><a href="{{ route('roads.create') }}?latitude=' + latitude + '&longitude=' + longitude + '">Add new raod condition here</a>';
+                popupContent += '<br><a href="{{ route('roads.create') }}?latitude=' + latitude + '&longitude=' + longitude + '">Add new road condition here</a>';
 
                 theMarker = L.marker([latitude, longitude]).addTo(map);
                 theMarker.bindPopup(popupContent)
