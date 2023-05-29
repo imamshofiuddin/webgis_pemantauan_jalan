@@ -9,7 +9,7 @@
             <td><p>Laporan belum disetujui : {{ $totalWaitingReport }}</p></td>
         </tr>
     </table>
-    <div class="row g-4 my-3">
+    <div class="row g-4 mb-3">
         <div class="col-lg-6">
             <div id="piechartDataRoadCondition" style="width: 100%; height: 350px;"></div>
         </div>
