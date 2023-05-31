@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+@if(session()->has('message'))
+<div class="container">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Berhasil melaporkan!</strong> {{ session()->get('message') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+@endif
     <div class="card">
         <div class="card-body" id="map"></div>
     </div>

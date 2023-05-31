@@ -55,7 +55,7 @@ class RoadController extends Controller
         if (Auth::user()) {
             return redirect()->route('roads.show', $road);
         } else {
-            return redirect()->route('road_map.index');
+            return redirect()->route('road_map.index')->with('message', 'Laporanmu kini sedang dalam pengecekan');
         }
 
 

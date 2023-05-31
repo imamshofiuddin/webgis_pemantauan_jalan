@@ -58,7 +58,7 @@
                 </div>
                 <div class="card-footer">
                     <button type="submit" class="btn btn-success" name="submit">Add Road</button>
-                    <a href="{{ route('roads.index') }}" class="btn btn-link">Cancel</a>
+                    {{-- <a href="{{ route('roads.index') }}" class="btn btn-link">Cancel</a> --}}
                 </div>
             </form>
         </div>

@@ -61,16 +61,4 @@ crossorigin=""/>
         </div>
     </div>
 </div>
-
-<center>
-    <br>
-    <p>Your coords</p>
-    <form class="locationForm" action="">
-        <input type="text" name="latitude" value="" disabled>
-        <input type="text" name="longitude" value="" disabled>
-    </form>
-    <br>
-    <div id="map"></div>
-</center>
-<p></p>
 @endsection
